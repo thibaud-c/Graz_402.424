@@ -7,7 +7,7 @@
 - Spatial Analysis: Performing raster calculations to determine population change.
 - Data Visualization: Creating informative maps to communicate your findings.
 
-Let's get started!
+Let's get started! 💪
 
 
 ## 1. 💾 Get the Data
@@ -29,11 +29,12 @@ GHSL provides valuable data on human settlements and population. We will downloa
 > Look for a population layer that corresponds to the years 1990 and 2025. The GHSL datasets are usually available in different versions and resolutions. Choose the datasets that best suit your needs. Explore the website to learn about available data.
 > Pay attention to the data description and metadata.
 
-> <details>
->    <summary>💡 Are you blocked? </summary>
->    <br>
-> Select the GHS-POP layer. Epoch 1990 and 2025. Resolution 3 arc-seconds. Coordinate Reference System: WGS 84. 
-> </details>
+<details>
+   <summary>💡 Are you blocked? </summary>
+   <br>
+    Select the GHS-POP layer. Epoch 1990 and 2025. Resolution 3 arc-seconds. Coordinate Reference System: WGS 84. 
+    <br>
+</details>
 
 3️⃣ Download the Population Rasters
 > [!IMPORTANT]
@@ -59,19 +60,20 @@ We need the boundary of Styria to clip our population data and focus our analysi
 > [!TIPS]
 > boundary of styria can be described as a `relation` of `type` `boundary` with a specific `name`. You can filter the relation by its name tag.
 
-> <details>
->    <summary>💡 Are you blocked? </summary>
->    <br>
-> ```overpass
-> rel[type=boundary]['name:en'='Styria'];
-> out geom;
-> ```
-> Explanation of the query:
-> - `rel[...]`: This targets relations in OSM, which are used to group multiple elements together. Boundaries are often represented as relations.
-> - `type=boundary`: We are specifically looking for relations that are of type "boundary".
-> - `'name:en'='Styria'`: We are filtering for boundaries that have the English name "Styria".
-> - `out geom;`: This instructs Overpass Turbo to output the geometry of the selected feature.
-> </details>
+<details>
+   <summary>💡 Are you blocked? </summary>
+   <br>
+    ```overpass
+    rel[type=boundary]['name:en'='Styria'];
+    out geom;
+    ```
+    🔬 Explanation of the query:
+    - `rel[...]`: This targets relations in OSM, which are used to group multiple elements together. Boundaries are often represented as relations.
+    - `type=boundary`: We are specifically looking for relations that are of type "boundary".
+    - `'name:en'='Styria'`: We are filtering for boundaries that have the English name "Styria".
+    - `out geom;`: This instructs Overpass Turbo to output the geometry of the selected feature.
+    <br>
+</details>
 
 
 4️⃣ Run the query and export the boundary data as GeoJSON
@@ -163,18 +165,17 @@ In the "Expression" box, enter the appropriate formula
 > [!TIPS]
 > The formula is about identify the change in population between 2025 and 1990. In other words we want to know the net change in population for each pixel in the raster (or how much the population has increased or decreased). You need to subtract the two raster layers.
 
-> <details>
->    <summary>💡 Are you blocked? </summary>
->    <br>
-> 
-> The formula should look like this:
-> `"population_2025_styria@1" - "population_1990_styria@1"`
-> 
-> Explanation:
-> "population_2025_styria@1" refers to the first band (and in this case, the only band) of your clipped population raster for 2025.
-> "population_1990_styria@1" refers to the first band of your clipped population raster for 1990.
-> - is the subtraction operator, calculating the difference between the two rasters.
-> </details>
+<details>
+   <summary>💡 Are you blocked? </summary>
+   <br>
+    The formula should look like this:
+    `"population_2025_styria@1" - "population_1990_styria@1"`
+    _🔬 Explanation:_
+    - `population_2025_styria@1` refers to the first band (and in this case, the only band) of your clipped population raster for 2025.
+    - `population_1990_styria@1` refers to the first band of your clipped population raster for 1990.
+    - `-` is the subtraction operator, calculating the difference between the two rasters.
+    <br>
+</details>
 
 The resulting raster represents the population difference between 2025 and 1990 for Styria.
 
@@ -211,3 +212,6 @@ What about the population in Sri Lanka? Can you repeat the same analysis for Sri
 
 > [!TIPS]
 > Here you'll need an additional step. The boundaries of Sri Lanka are spread across multiple tiles. You will need to merge these tiles to create a single raster layer for Sri Lanka. You can use the `Merge Vector Layers` tool in QGIS to combine the boundary tiles into one layer.
+
+
+💪 Congratulations! You have completed this exercice! 🎉 
