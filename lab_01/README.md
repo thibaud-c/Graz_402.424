@@ -17,7 +17,6 @@ We need two main datasets:
 - Population Data for 1990 and 2025: We will use the Global Human Settlement Layer (GHSL), a great resource for global population data.
 - Border of Styria: We will obtain this from OpenStreetMap (OSM) using Overpass Turbo.
 
-<br>
 ### 1.1. Download Population Data from GHSL
 
 GHSL provides valuable data on human settlements and population. We will download population rasters for the years 1990 and 2025.
@@ -35,7 +34,7 @@ Look for datasets that are likely to represent population counts or density. Spe
 <details>
    <summary>💡 Are you blocked? ______</summary>
    <br>
-    Select the GHS-POP layer. Epoch 1990 and 2025. Resolution 3 arc-seconds. Coordinate Reference System: WGS 84. 
+> Select the GHS-POP layer. Epoch 1990 and 2025. Resolution 3 arc-seconds. Coordinate Reference System: WGS 84. 
     <br>
 </details>
 <br>
@@ -46,10 +45,11 @@ Look for datasets that are likely to represent population counts or density. Spe
 > Ensure you download the data in a raster format compatible with QGIS, such as GeoTIFF (.tif). 
 > Observe the data that you downloaded, read the metadata file if present. Is it what you expected?
 
+<br>
 **4️⃣ Organize your files**<br>
 Rename the files to something descriptive, like population_1990.tif and population_2025.tif to easily distinguish them.
 
-<br>
+
 ### 1.2. Download Styria Border from OpenStreetMap
 
 We need the boundary of Styria to clip our population data and focus our analysis on this region. We will use Overpass Turbo, a web-based tool to query and extract data from OpenStreetMap (OSM).
@@ -59,12 +59,14 @@ We need the boundary of Styria to clip our population data and focus our analysi
 > [!TIP]
 > The query language for Overpass Turbo is based on Overpass QL. You can find more information about Overpass QL in the [Overpass API documentation](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL).
 
+<br>
 **2️⃣ Try to identify how to query for the boundary of Styria**<br>
 You need first to understand what is the geographical object "boundary of Styria".
 
 > [!TIP]
 > Go on OpenStreetMap and search for "Styria". What type of object is it? How is it represented in OSM?
 
+<br>
 **3️⃣ Write an Overpass Query to Extract the Styria Boundary**
 
 > [!TIP]
@@ -73,16 +75,18 @@ You need first to understand what is the geographical object "boundary of Styria
 <details>
    <summary>💡 Are you blocked? ______</summary>
    <br>
-```js
-rel[type=boundary]['name:en'='Styria'];
-out geom;
-```
-**🔬 Explanation:**
-- `rel[...]`: This targets relations in OSM, which are used to group multiple elements together. Boundaries are often represented as relations.<br>
-- `type=boundary`: We are specifically looking for relations that are of type "boundary".<br>
-- `'name:en'='Styria'`: We are filtering for boundaries that have the English name "Styria".<br>
-- `out geom;`: This instructs Overpass Turbo to output the geometry of the selected feature.
-    <br>
+
+> ```js
+> rel[type=boundary]['name:en'='Styria'];
+> out geom;
+> ```
+
+> **🔬 Explanation:**
+> - `rel[...]`: This targets relations in OSM, which are used to group multiple elements together. Boundaries are often represented as relations.<br>
+> - `type=boundary`: We are specifically looking for relations that are of type "boundary".<br>
+> - `'name:en'='Styria'`: We are filtering for boundaries that have the English name "Styria".<br>
+> - `out geom;`: This instructs Overpass Turbo to output the geometry of the selected feature.
+
 </details>
 <br>
 
@@ -117,8 +121,7 @@ Go to `Layer` in the menu bar -> `Add Layer` -> `Add Vector Layer...`
 
 **1️⃣ Reproject Population Raster 1990**<br>
 In the "Layers" panel, right-click on your population_1990 raster layer.<br>
-Go to `Layer CRS` -> `Set Layer CRS...`
-
+Go to `Layer CRS` -> `Set Layer CRS...`<br>
 In the "Layer CRS Setting" dialog, in the "Filter" box, type 31256.<br>
 From the list below, select EPSG:31256 - WGS 84 / UTM zone 33N.<br>
 Click "OK".
@@ -146,14 +149,14 @@ Now we will clip both population rasters to the extent of the Styria border. Thi
 
 😱 Troubleshooting: Boundary layer doesn't appear in "Mask layer" dropdown?
 > [!TIP]
-> Is your boundary layer a polygon? The "Clip Raster by Mask Layer" tool requires a polygon layer as the mask. Sometimes, data from OSM can be downloaded as lines or multipolygons, especially boundary relations.<br>
-> Check your Styria border layer: In the "Layers" panel, right-click on your styria_border layer, go to Properties, and then to the Information tab. Look for "Geometry type". It should be "Polygon" or "MultiPolygon".<br>
+> Is your boundary layer a polygon? The "Clip Raster by Mask Layer" tool requires a polygon layer as the mask. Sometimes, data from OSM can be downloaded as lines or multipolygons, especially boundary relations.<br><br>
+> Check your Styria border layer: In the "Layers" panel, right-click on your styria_border layer, go to Properties, and then to the Information tab. Look for "Geometry type". It should be "Polygon" or "MultiPolygon".<br><br>
 > If it's not a Polygon: You need to `Polygonize` your boundary layer.<br>
 > Go to Processing -> Toolbox and search for Polygonize.<br>
 > Double-click on the Polygonize tool (under Vector geometry).<br>
 > Input layer: Select your styria_border layer.<br>
 > Field name for polygon attribute: You can leave this empty or choose an attribute field if you want to transfer attributes to the polygon layer.<br>
-> Click "Run".<br>
+> Click "Run".<br><br>
 > Now, try the "Clip Raster by Mask Layer" tool again, and styria_border_polygon should appear in the "Mask layer" dropdown.
 
 **🔁 Clip Population Raster 2025: Repeat step 1&2, but this time**:
@@ -178,13 +181,13 @@ Now we will calculate the difference between the population raster of 2025 and 1
 <details>
    <summary>💡 Are you blocked? ______</summary>
    <br>
-    The formula should look like this_<br>
-    `"population_2025_styria@1" - "population_1990_styria@1"`<br>
-
-    **🔬 Explanation:**
-    - `population_2025_styria@1` refers to the first band (and in this case, the only band) of your clipped population raster for 2025.
-    - `population_1990_styria@1` refers to the first band of your clipped population raster for 1990.
-    - `-` is the subtraction operator, calculating the difference between the two rasters.
+> The formula should look like this:<br>
+> `"population_2025_styria@1" - "population_1990_styria@1"` <br>
+> 
+> **🔬 Explanation:**
+> - `population_2025_styria@1` refers to the first band (and in this case, the only band) of your clipped population raster for 2025.
+> - `population_1990_styria@1` refers to the first band of your clipped population raster for 1990.
+> - `-` is the subtraction operator, calculating the difference between the two rasters.
 </details>
 <br>
 The resulting raster represents the population difference between 2025 and 1990 for Styria.
@@ -211,9 +214,9 @@ Click "Apply" and "OK" in the Layer Properties dialog to apply the symbology cha
 ## 5. 🤔 Interpretation and Further Exploration
 Take a moment to examine your map.
 
-Observe the spatial patterns: Where in Styria did population grow the most? Where did it decline? Are there any regional trends?<br>
-Relate to real-world factors: Can you think of any reasons for the observed population changes? Consider economic factors, urbanization, rural migration, etc.<br>
-Consider limitations: Reflect on the data sources and methods used. What are potential limitations of using GHSL data and raster calculations for this type of analysis? (e.g., resolution of the data, accuracy of population estimates).
+- **Observe the spatial patterns**: Where in Styria did population grow the most? Where did it decline? Are there any regional trends?<br>
+- **Relate to real-world factors**: Can you think of any reasons for the observed population changes? Consider economic factors, urbanization, rural migration, etc.<br>
+- **Consider limitations**: Reflect on the data sources and methods used. What are potential limitations of using GHSL data and raster calculations for this type of analysis? (e.g., resolution of the data, accuracy of population estimates).
 
 
 ## 🔍 Further Exploration:
