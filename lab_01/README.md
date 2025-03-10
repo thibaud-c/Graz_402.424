@@ -45,8 +45,9 @@ Look for datasets that are likely to represent population counts or density. Spe
 > [!IMPORTANT]
 > Ensure you download the data in a raster format compatible with QGIS, such as GeoTIFF (.tif). 
 > Observe the data that you downloaded, read the metadata file if present. Is it what you expected?
-
+ 
 <br>
+
 **4️⃣ Organize your files**<br>
 Rename the files to something descriptive, like population_1990.tif and population_2025.tif to easily distinguish them.
 
@@ -61,6 +62,7 @@ We need the boundary of Styria to clip our population data and focus our analysi
 > The query language for Overpass Turbo is based on Overpass QL. You can find more information about Overpass QL in the [Overpass API documentation](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL).
 
 <br>
+
 **2️⃣ Try to identify how to query for the boundary of Styria**<br>
 You need first to understand what is the geographical object "boundary of Styria".
 
@@ -68,6 +70,7 @@ You need first to understand what is the geographical object "boundary of Styria
 > Go on OpenStreetMap and search for "Styria". What type of object is it? How is it represented in OSM?
 
 <br>
+
 **3️⃣ Write an Overpass Query to Extract the Styria Boundary**
 
 > [!TIP]
