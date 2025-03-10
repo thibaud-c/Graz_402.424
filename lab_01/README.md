@@ -34,8 +34,9 @@ Look for datasets that are likely to represent population counts or density. Spe
 <details>
    <summary>💡 Are you blocked? ______</summary>
    <br>
+   
 > Select the GHS-POP layer. Epoch 1990 and 2025. Resolution 3 arc-seconds. Coordinate Reference System: WGS 84. 
-    <br>
+
 </details>
 <br>
 
@@ -80,7 +81,7 @@ You need first to understand what is the geographical object "boundary of Styria
 > rel[type=boundary]['name:en'='Styria'];
 > out geom;
 > ```
-
+>
 > **🔬 Explanation:**
 > - `rel[...]`: This targets relations in OSM, which are used to group multiple elements together. Boundaries are often represented as relations.<br>
 > - `type=boundary`: We are specifically looking for relations that are of type "boundary".<br>
@@ -181,6 +182,7 @@ Now we will calculate the difference between the population raster of 2025 and 1
 <details>
    <summary>💡 Are you blocked? ______</summary>
    <br>
+
 > The formula should look like this:<br>
 > `"population_2025_styria@1" - "population_1990_styria@1"` <br>
 > 
@@ -188,6 +190,7 @@ Now we will calculate the difference between the population raster of 2025 and 1
 > - `population_2025_styria@1` refers to the first band (and in this case, the only band) of your clipped population raster for 2025.
 > - `population_1990_styria@1` refers to the first band of your clipped population raster for 1990.
 > - `-` is the subtraction operator, calculating the difference between the two rasters.
+
 </details>
 <br>
 The resulting raster represents the population difference between 2025 and 1990 for Styria.
