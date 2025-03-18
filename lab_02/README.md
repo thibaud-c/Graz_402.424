@@ -72,14 +72,16 @@ You can use the command `wget`
 <details>
    <summary>💡 Are you blocked? </summary>
    <br>
+
     ```bash
     wget "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E1990_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E1990_GLOBE_R2023A_4326_3ss_V1_0_R5_C20.zip"
     wget "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2025_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2025_GLOBE_R2023A_4326_3ss_V1_0_R5_C20.zip"
     ```
+
     <br>
 </details>
 
-> [!INFO]
+> [!NOTE]
 > you can also use `curl` instead of `wget` to download the files.
 
 > [!IMPORTANT]
@@ -111,10 +113,13 @@ Nominatim is a search engine for OpenStreetMap data. We will use it to query the
 <details>
    <summary>💡 Are you blocked? </summary>
    <br>
+
     ```bash
     wget "https://nominatim.openstreetmap.org/search?q=Styria&format=geojson&polygon_geojson=1" -O styria_border.geojson
     ```
+
     <br>
+
     _🔬 Explanation:_
     - `wget`: Command-line tool for downloading files from the internet.
     - `"https://nominatim.openstreetmap.org/search?`: Base URL of the Nominatim service.
@@ -122,7 +127,7 @@ Nominatim is a search engine for OpenStreetMap data. We will use it to query the
     - `&format=geojson`: Additional parameter to specify the response format as GeoJSON.
     - `&polygon_geojson=1"`: Additional parameter to include the polygon in GeoJSON format.
     - `-O styria_border.geojson`: Specifies the output filename as styria_border.geojson.
-    ```
+
     <br>
 </details>
 
@@ -144,7 +149,7 @@ We will use the [`unzip`](https://manpages.ubuntu.com/manpages/jammy/man1/unzip.
 > Use the `unzip` command followed by the filename of the zip file you want to extract.
 > You can list the contents of a zip file using `unzip -l filename.zip`. 
 
-> [!INFO]
+> [!NOTE]
 > Test if unzip in installed in your computer by typing `unzip --version` in your CLI.
 > If you have an error, you can install unzip using `apt-get install unzip`
 > To be noted, your zip files contain the same metadata, you will have to overwrite the files when unzipping the second file.
@@ -152,12 +157,14 @@ We will use the [`unzip`](https://manpages.ubuntu.com/manpages/jammy/man1/unzip.
 <details>
    <summary>💡 Are you blocked? </summary
    <br>
+
     ```bash
     unzip -l GHS_POP_E1990_GLOBE_R2023A_4326_3ss_V1_0_R5_C20.zip
     unzip -l GHS_POP_E2025_GLOBE_R2023A_4326_3ss_V1_0_R5_C20.zip
     unzip GHS_POP_E1990_GLOBE_R2023A_4326_3ss_V1_0_R5_C20.zip
     unzip -o GHS_POP_E2025_GLOBE_R2023A_4326_3ss_V1_0_R5_C20.zip
     ```
+
     <br>
 </details>
 
@@ -170,7 +177,7 @@ We will use [`gdalwarp`](https://gdal.org/en/stable/programs/gdalwarp.html#gdalw
 
 1️⃣ Reproject Population Raster 1990
 
-> [!INFO]
+> [!NOTE]
 > Test if GDAL in installed in your computer by typing `gdal --version` in your CLI. 
 > If you have an error, you can install GDAL using `apt-get install gdal-bin libgdal-dev`
 
@@ -183,21 +190,24 @@ Use the `gdalwarp` command followed by the target SRS, the input raster file, an
 <details>
     <summary>💡 Are you blocked? </summary
     <br>
+
     ```bash
     gdalwarp -s_srs EPSG:4326 -t_srs EPSG:31256 GHS_POP_E1990_GLOBE_R2023A_4326_3ss_V1_0_R5_C20.tif population_1990_reprojected.tif
     ```
+
     _🔬 Explanation:_
     - `gdalwarp`: GDAL utility for reprojecting and warping raster datasets.
     - `-s_srs EPSG:4326`: Specifies the source Spatial Reference System (SRS) as EPSG:4326.
     - `-t_srs EPSG:31256`: Specifies the target SRS as EPSG:31256.
     - `GHS_POP_E1990_GLOBE_R2023A_4326_3ss_V1_0_R5_C20.tif`: Input raster file to be reprojected.
     - `population_1990_reprojected.tif`: Output reprojected raster file.
-    ```
+
     <br>
 </details>
 
 🔁 Repeat the same command for the Population Raster 2025 (🚧 Think about changing filenames)
 
+<br>
 
 2️⃣ Reproject Styria Border Vector Layer
 We will use [`ogr2ogr`](https://gdal.org/en/stable/programs/ogr2ogr.html) to reproject the Styria border GeoJSON file to EPSG:31256.
@@ -218,9 +228,12 @@ Use the `ogr2ogr` command followed by the target SRS, the source SRS, the output
 <details>
     <summary>💡 Are you blocked? </summary>
     <br>
+
     ```bash
     ogr2ogr -s_srs EPSG:4326 -t_srs EPSG:31256 styria_border_reprojected.geojson styria_border.geojson
     ```
+
+    <br>
 </details>
 
 
@@ -245,9 +258,11 @@ We will use gdalwarp again to clip the reprojected population rasters using the 
 <details>
     <summary>💡 Are you blocked? </summary>
     <br>
+
     ```bash
     gdalwarp -cutline styria_border_reprojected.geojson -cl styria -dstalpha -crop_to_cutline population_1990_reprojected.tif population_1990_styria_clipped.tif
     ```
+
     _ 🔬 Explanation_
     - `gdalwarp`: Used for clipping as well as reprojection.
     - `-cutline styria_border_reprojected.geojson`: Specifies the vector file to use as the clipping boundary (the Styria border).
@@ -256,6 +271,7 @@ We will use gdalwarp again to clip the reprojected population rasters using the 
     - `-crop_to_cutline`: Ensures the output raster extent is exactly the extent of the cutline.
     - `population_1990_reprojected.tif`: Input raster to be clipped.
     - `population_1990_styria_clipped.tif`: Output clipped raster file.
+    
     <br>
 </details>
 
@@ -279,9 +295,11 @@ Use the `gdal_calc.py` command followed by the input rasters and the calculation
 <details>
     <summary>💡 Are you blocked? </summary
     <br>
+
     ```bash
     gdal_calc.py -A population_2025_styria_clipped.tif -B population_1990_styria_clipped.tif --outfile=population_change_1990_2025.tif --calc="A-B" --format="GTiff"
     ```
+
     _🔬 Explanation:_
     - `gdal_calc.py`: The GDAL raster calculator script (🚧 don't for forget the `.py`).
     - `-A` population_2025_styria_clipped.tif: Assigns the 2025 clipped raster to variable 'A'.
@@ -289,6 +307,7 @@ Use the `gdal_calc.py` command followed by the input rasters and the calculation
     - `--outfile=population_change_1990_2025.tif`: Specifies the output raster filename.
     - `--calc="A-B"`: Defines the raster calculation expression: subtract raster B (1990) from raster A (2025).
     - `--format=GTiff`: Sets the output raster format to GeoTIFF.
+    
     <br>
 </details>
 
@@ -309,9 +328,11 @@ In a command-line environment, "visualization" in the traditional sense is not d
 <details>
     <summary>💡 Are you blocked? </summary
     <br>
+
     ```bash
     gdalinfo -stats population_change_1990_2025.tif
     ```
+    
     <br>
 </details>
 
