@@ -9,10 +9,10 @@
 
 Let's begin! 💪
 
-## Prerequisites
+## Tools
 Before starting, ensure you have the following installed on your system:
 
-- using the Command-Line Interface (CLI) via docker (ubuntu image)
+- Command-Line Interface (CLI) via docker (ubuntu image)
 - GDAL (Geospatial Data Abstraction Library): GDAL is a fundamental library for geospatial data processing.  Make sure you have GDAL utilities installed and accessible from your command line (like gdalwarp, gdal_calc.py, ogr2ogr). 
 - ogr2ogr: A command-line tool for converting between different geospatial formats. It is part of the GDAL suite.
 - gdalwarp: A command-line tool for reprojecting and warping raster datasets. It is part of the GDAL suite.
@@ -40,22 +40,25 @@ Open your command-line interface (from docker).
 <details>
    <summary>💡 Are you blocked? </summary>
    <br>
+
     ```bash
     cd home/ubuntu
     mkdir lab_02 lab_02/data
     cd lab_02/data
     ```
+
     <br>
 </details>
 
-2️⃣ Download Population Rasters using wget 
+2️⃣ Identify the link to download the raster data from the GHSL website. 
 Identify Download URLs: You will need to manually visit the GHSL download page in a web browser: https://ghsl.jrc.ec.europa.eu/download.php and find the direct download links for the GHSL Population Grid datasets for years close to 1990 and 2025.
 
 > [!TIP]
 > Use the inspector F12 to open the developer panel and find the download links in the network tab.
 > You can also right-click on the tile and copy the link address. 
 
-Use your command-line interface to download the population rasters. You can use the command `wget` 
+3️⃣ Use your command-line interface to download the population rasters. 
+You can use the command `wget` 
 
 > [!TIP]
 > Use the `wget` command followed by the URL of the file you want to download.

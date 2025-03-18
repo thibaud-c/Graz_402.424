@@ -30,11 +30,16 @@ docker pull ubuntu:latest
 Search for `ubuntu` in the Docker Desktop App and click on the `Pull` button.
 
 ## 2. Create a volume for the container
-A volume is a persistent data storage mechanism that allows data to be shared between the host (your computer) and the container.
+A volume is a persistent data storage mechanism that allows data to persist even after the container is deleted. You can create, delete, or manage volumes using the Docker API or CLI.
 
 ```bash
 docker volume create ubuntu-volume
 ```
+
+**Explanation**:
+- `docker volume create`: This command is used to create a volume.
+- `ubuntu-volume`: This is the name of the volume.
+
 
 ## 3. Create a container from the `ubuntu:latest` image
 A container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI.
@@ -48,7 +53,7 @@ docker run -it --name ubuntu-cli -v ubuntu-volume:/data ubuntu:latest
 - `-v ubuntu-volume:/data`: This flag is used to mount the volume `ubuntu-volume` to the `/data` directory in the container.
 - `ubuntu:latest`: This is the image from which the container is created.
 
-> [!INFORMATION]
+> [!NOTE]
 > You are now inside the container. You can run any command that you would run on an Ubuntu machine. The current path is root (`/`). Try to list the directories using the `ls` command.
 
 > [!TIP]
@@ -78,12 +83,26 @@ docker stop ubuntu-cli
 docker exec -it ubuntu-cli bash
 ```
 
-6. Transfer files between the host and the container
+**Explanation:**
+- `docker exec`: This command is used to run a command in a running container.
+- `-it`: This flag is used to run the command in interactive mode.
+- `ubuntu-cli`: This is the name of the container.
+- `bash`: This is the command that we want to run in the container.
+
+
+
+## 7. Transfer files between the host and the container
 You can use the `docker cp` command.
 
 ```bash
 docker cp ubuntu-cli:/home/ubuntu/filepath /path/to/destination
 ```
+
+**Explanation**:
+- `docker cp`: This command is used to copy files between the host and the container.
+- `ubuntu-cli`: This is the name of the container.
+- `/home/ubuntu/filepath`: This is the path of the file in the container.
+- `/path/to/destination`: This is the path where you want to copy the file on the host.
 
 > [!TIP]
 > You can use the `docker cp` command to copy files from the host to the container or vice versa.
