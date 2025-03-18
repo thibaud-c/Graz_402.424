@@ -38,7 +38,7 @@ Open your command-line interface (from docker).
 > Create a new directory with the `mkdir` command and navigate into it using `cd`.
 
 <details>
-   <summary>💡 Are you blocked? </summary>
+   <summary>💡 Are you blocked? ______ </summary>
    <br>
 
     ```bash
@@ -70,7 +70,7 @@ You can use the command `wget`
 > To install a tool in ubuntu you can use `apt-get install` in your CLI: `apt-get install wget` 
 
 <details>
-   <summary>💡 Are you blocked? </summary>
+   <summary>💡 Are you blocked? ______ </summary>
    <br>
 
     ```bash
@@ -111,7 +111,7 @@ Nominatim is a search engine for OpenStreetMap data. We will use it to query the
 > You can also use `mv` to rename the file to `styria_border.geojson`
 
 <details>
-   <summary>💡 Are you blocked? </summary>
+   <summary>💡 Are you blocked? ______ </summary>
    <br>
 
     ```bash
@@ -155,7 +155,7 @@ We will use the [`unzip`](https://manpages.ubuntu.com/manpages/jammy/man1/unzip.
 > To be noted, your zip files contain the same metadata, you will have to overwrite the files when unzipping the second file.
 
 <details>
-   <summary>💡 Are you blocked? </summary
+   <summary>💡 Are you blocked? ______ </summary>
    <br>
 
     ```bash
@@ -188,7 +188,7 @@ Use the `gdalwarp` command followed by the target SRS, the input raster file, an
 > The source SRS for EPSG:4326 is `-s_srs EPSG:4326`
 
 <details>
-    <summary>💡 Are you blocked? </summary
+    <summary>💡 Are you blocked? ______ </summary>
     <br>
 
     ```bash
@@ -226,7 +226,7 @@ Use the `ogr2ogr` command followed by the target SRS, the source SRS, the output
 
 
 <details>
-    <summary>💡 Are you blocked? </summary>
+    <summary>💡 Are you blocked? ______ </summary>
     <br>
 
     ```bash
@@ -256,7 +256,7 @@ We will use gdalwarp again to clip the reprojected population rasters using the 
 > The option `--crop_to_cutline` ensures the output raster extent is exactly the extent of the cutline.
 
 <details>
-    <summary>💡 Are you blocked? </summary>
+    <summary>💡 Are you blocked? ______ </summary>
     <br>
 
     ```bash
@@ -293,7 +293,7 @@ Use the `gdal_calc.py` command followed by the input rasters and the calculation
 > Use the `--format` flag to specify the output format (e.g., GeoTIFF).
 
 <details>
-    <summary>💡 Are you blocked? </summary
+    <summary>💡 Are you blocked? ______ </summary>
     <br>
 
     ```bash
@@ -326,7 +326,7 @@ In a command-line environment, "visualization" in the traditional sense is not d
 > Use the `gdalinfo` command with the `-stats` flag followed by the raster filename to calculate and display raster statistics.
 
 <details>
-    <summary>💡 Are you blocked? </summary
+    <summary>💡 Are you blocked? ______ </summary>
     <br>
 
     ```bash
