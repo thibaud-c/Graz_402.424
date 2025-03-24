@@ -168,7 +168,7 @@ We will use the [`unzip`](https://manpages.ubuntu.com/manpages/jammy/man1/unzip.
 <br>
 </details>
 
-> [!TIPS]
+> [!TIP]
 > you can use `gdalinfo filename` to get information about the file (e.g., projection, size, etc.)
 
 
