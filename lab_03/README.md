@@ -204,7 +204,7 @@ echo "Targeted Projection: ${t_proj}"
 > To use a variable in a string, you can enclose the variable name in curly braces `${variable}`. It will be useful to create the URL for the download.
 
 
-3️⃣ Download Population Data <br>
+4️⃣ Download Population Data <br>
 As last week, we will use `wget` to download the population rasters from GHSL. We need to construct the download URLs based on the parameters in the configuration file.
 
 > [!TIP]
@@ -216,9 +216,9 @@ As last week, we will use `wget` to download the population rasters from GHSL. W
 <br>
 
 >    ```bash
-    wget "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip" -O data/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip
+>    wget "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip" -O data/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip
 >    ```
-
+>
 >    **Explanation:**
 >    - `wget`: Command-line tool for downloading files from the internet.
 >    - `"URL"`: The URL of the file to download. We use double quotes to enclose the URL.
@@ -230,7 +230,7 @@ As last week, we will use `wget` to download the population rasters from GHSL. W
 
 🔁 Do the same for both of the raster urls. 
 <br>
-4️⃣ Download the Area Border from Nominatim <br>
+5️⃣ Download the Area Border from Nominatim <br>
 You need to construct the URL to download the area border from Nominatim.
 
 <details>
@@ -240,7 +240,7 @@ You need to construct the URL to download the area border from Nominatim.
 >    ```bash
 >    wget "https://nominatim.openstreetmap.org/search?q=${area}&format=geojson&polygon_geojson=1" -O data/${area}_border.geojson
 >    ```
-
+>
 >    **Explanation:**
 >    - `wget`: Command-line tool for downloading files from the internet.
 >    - `"URL"`: The URL of the file to download. We use double quotes to enclose the URL.
@@ -251,7 +251,7 @@ You need to construct the URL to download the area border from Nominatim.
 <br>
 </details>
 
-5️⃣ Unzip Population Rasters <br>
+6️⃣ Unzip Population Rasters <br>
 Add the commands to unzip the population raster files downloaded from GHSL in your script.
 
 > [!TIP]
