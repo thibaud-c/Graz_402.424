@@ -24,7 +24,7 @@ Before starting, ensure you have the following installed on your system:
 > [!TIP]
 > You can use `apt-get install` in your CLI: `apt-get install vim`
 
-## 1. 🧾 Create a config file to provide the parameters
+## 1. 🧾 Create a config file to provide the parameters 
 A configuration file is a file that contains the parameters of your program or script. It allows you to separate the configuration from the code, making it easier to manage and update the parameters, but also it helps to reduce the risk of errors.
 
 We will create a configuration file to store the parameters of the exercise. This file will be used to automate the download and processing of the data.
@@ -37,15 +37,17 @@ We will create a configuration file to store the parameters of the exercise. Thi
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    touch config.txt
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    touch config.txt
+>    ```
+
+<br>
 </details>
+<br>
 
-
-2️⃣ Open the `config.txt` file in a text editor 
+2️⃣ Open the `config.txt` file in a text editor <br>
 We will use `vim` as a text editor. Vim is a highly configurable text editor built to enable efficient text editing. It works as a command-line interface and is available on most Unix-based systems.
 
 > [!TIP]
@@ -53,25 +55,27 @@ We will use `vim` as a text editor. Vim is a highly configurable text editor bui
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    vim data/config.txt
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    vim data/config.txt
+>    ```
+
+<br>
 </details>
 
 
-3️⃣ Add parameters to the `config.txt` file
+3️⃣ Add parameters to the `config.txt` file <br>
 ❓ What parameters do we need to automate the download and processing of the data? Remember that these parameters should be configurable and reusable for different areas and years.
 
 > [!TIP]
 > In vim you can use the `i` key to enter insert mode and start typing.
 > Press `Esc` to exit insert mode.
-> Type `:wq!` and press `Enter` to save and exit vim.
+> Type `:wq` and press `Enter` to save and exit vim.
 > - `:` to enter command mode
 > - `w` to write
 > - `q` to quit
-> - `!` to force
+> - `!` to force (if needed)
 
 We need a few parameters to automate the download and processing of the data:
 - `area`: The area for which we want to estimate population change (e.g., Styria).
@@ -80,14 +84,15 @@ We need a few parameters to automate the download and processing of the data:
 - `row`: The row number of the tile to download from GHSL (e.g., 5).
 - `column`: The column number of the tile to download from GHSL (e.g., 20).
 
-The config file is easy to read and write. It is a simple text file with key-value pairs. Each line contains a parameter name followed by an equal sign and the parameter value.
+The config file is easy to read and write. It is a simple text file with key-value pairs. Each line contains a parameter name followed by an equal sign and the parameter value.<br>
 Example:
-> key1=value1
-> key2=value2
+> - key1=value1
+> - key2=value2
 
 You can add comment to your file by starting the line with `#`. Comments are useful to explain the purpose of the parameters or to provide additional information.
-
+<br>
 Here is what you config file should look like:
+
 ```plaintext
 # Configuration File for Estimating Population Change in Styria (1990-2025)
 # selecting an area, it could be any name that are recognized by Nominatim  
@@ -105,19 +110,21 @@ column=20
 t_proj=31256
 ```
 
-
 4️⃣ Verify the contents of the `config.txt` file using the `cat` command.
 
 > [!TIP]
 > Use the `cat` command followed by the filename to display the contents of the file.
 
+
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    cat config.txt
-    ```
-    <br>
+<br>
+    
+>    ```bash
+>    cat config.txt
+>    ```
+
+<br>
 </details>
 
 
@@ -127,29 +134,31 @@ Now that we have our configuration file, we will create a script to automate the
 ### 2.1. Create a Shell Script
 A shell script is a computer program designed to be run by the Unix shell, a command-line interpreter. It is a text file containing a sequence of commands for a shell to execute. In a script each sequences are run in order, and you can add control structures (e.g., loops, conditions) to automate complex tasks. If an error occurs, the script will stop executing.
 
-1️⃣ Create a new file named `population_change.sh` in your working directory (e.g., `lab_03`)
+1️⃣ Create a new file named `population_change.sh` in your working directory (e.g., `lab_03`) <br>
 `*.sh` is the standard extension for shell scripts. 
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    touch population_change.sh
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    touch population_change.sh
+>    ```
+
+<br>
 </details>
 
 2️⃣ Open the file with vim and start writing the script.
 
 ### 2.2. Add the Script to Automate the Workflow - Part 1
-We will write a shell script to automate the download and processing of the population data for the specified area and years. The script will read the parameters from the `config.txt` file and execute the necessary commands using GDAL and wget.
+We will write a shell script to automate the download and processing of the population data for the specified area and years. The script will read the parameters from the `config.txt` file and execute the necessary commands using GDAL and wget.<br>
 
-❓ What steps do we need to automate the download and processing of the data? Think about the sequence of commands and tools we need to use.
+❓ What steps do we need to automate the download and processing of the data? Think about the sequence of commands and tools we need to use.<br>
 
 Let's add and test the following steps in the script:
 
-1️⃣ Add context and comments to the script 
-Like before, comments are useful for explaining the purpose of the script and the different sections of the code.
+1️⃣ Add context and comments to the script <br>
+Like before, comments are useful for explaining the purpose of the script and the different sections of the code.<br>
 Furthermore, each bash script should start with a shebang `#!/bin/bash` to indicate that the script should be executed using the bash shell.
 
 ```bash
@@ -165,7 +174,7 @@ echo "Starting Population Change Estimation Script..."
 > The command `echo` is used to print a message to the terminal. It is useful for debugging and providing feedback to the user. 
 
 
-2️⃣ Create a working directory and an output directory.
+2️⃣ Create a working directory and an output directory. <br>
 It is cleaner to store the downloaded data in a separate directory. We will create a `data` directory to store the downloaded files and an `output` directory to store the processed data. Also, separating your files into different directories helps to keep your workspace organized, and facilitate the cleanup of temporary files.
 
 ```bash
@@ -177,7 +186,7 @@ mkdir -p output
 > [!TIP]
 > The `-p` flag is used to create parent directories if they do not exist. It prevents errors if the directories already exist.
 
-3️⃣ Read the configuration file to get the parameters.
+3️⃣ Read the configuration file to get the parameters. <br>
 We will use the `source` command to read the parameters from the `config.txt` file. This command reads and executes the content of the file in the current shell context. It is a convenient way to load configuration parameters into your script.
 
 ```bash
@@ -195,7 +204,7 @@ echo "Targeted Projection: ${t_proj}"
 > To use a variable in a string, you can enclose the variable name in curly braces `${variable}`. It will be useful to create the URL for the download.
 
 
-3️⃣ Download Population Data
+3️⃣ Download Population Data <br>
 As last week, we will use `wget` to download the population rasters from GHSL. We need to construct the download URLs based on the parameters in the configuration file.
 
 > [!TIP]
@@ -204,40 +213,45 @@ As last week, we will use `wget` to download the population rasters from GHSL. W
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    wget "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip" -O data/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip
-    ```
+<br>
 
-    **Explanation:**
-    - `wget`: Command-line tool for downloading files from the internet.
-    - `"URL"`: The URL of the file to download. We use double quotes to enclose the URL.
-    - `-O data/filename.zip`: Specifies the output filename and directory for the downloaded file.
-    - `${variable}`: The variable name enclosed in curly braces is replaced by the value of the variable.
-    <br>
+>    ```bash
+    wget "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip" -O data/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip
+>    ```
+
+>    **Explanation:**
+>    - `wget`: Command-line tool for downloading files from the internet.
+>    - `"URL"`: The URL of the file to download. We use double quotes to enclose the URL.
+>    - `-O data/filename.zip`: Specifies the output filename and directory for the downloaded file.
+>    - `${variable}`: The variable name enclosed in curly braces is replaced by the value of the variable.
+
+<br>
 </details>
 
 🔁 Do the same for both of the raster urls. 
-
-4️⃣ Download the Area Border from Nominatim
+<br>
+4️⃣ Download the Area Border from Nominatim <br>
 You need to construct the URL to download the area border from Nominatim.
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    wget "https://nominatim.openstreetmap.org/search?q=${area}&format=geojson&polygon_geojson=1" -O data/${area}_border.geojson
-    ```
-    **Explanation:**
-    - `wget`: Command-line tool for downloading files from the internet.
-    - `"URL"`: The URL of the file to download. We use double quotes to enclose the URL.
-    - `-O data/filename.geojson`: Specifies the output filename and directory for the downloaded file.
-    - `${variable}`: The variable name enclosed in curly braces is replaced by the value of the variable.
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    wget "https://nominatim.openstreetmap.org/search?q=${area}&format=geojson&polygon_geojson=1" -O data/${area}_border.geojson
+>    ```
+
+>    **Explanation:**
+>    - `wget`: Command-line tool for downloading files from the internet.
+>    - `"URL"`: The URL of the file to download. We use double quotes to enclose the URL.
+>    - `-O data/filename.geojson`: Specifies the output filename and directory for the downloaded file.
+>    - `${variable}`: The variable name enclosed in curly braces is replaced by the value of the variable.
+>    ```
+
+<br>
 </details>
 
-5️⃣ Unzip Population Rasters
+5️⃣ Unzip Population Rasters <br>
 Add the commands to unzip the population raster files downloaded from GHSL in your script.
 
 > [!TIP]
@@ -248,11 +262,13 @@ Add the commands to unzip the population raster files downloaded from GHSL in yo
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    unzip -o data/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip -d data
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    unzip -o data/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.zip -d data
+>    ```
+
+<br>
 </details>
 
 > [!NOTE]
@@ -260,7 +276,7 @@ Add the commands to unzip the population raster files downloaded from GHSL in yo
 > `unzip -o data/*.zip -d data`
 
 ### 2.3. 🧪 Time to test 
-Save your changes with `:wq!` and run the script in your terminal.
+Save your changes with `:wq` and run the script in your terminal.
 
 > [!TIP]
 > To run the script, you simply have to type `./script_name.sh` in your terminal.
@@ -277,7 +293,7 @@ chmod +x population_change.sh
 - `chmod`: Command to change the permissions of a file.
 - `+x`: Adds the executable permission to the file.
 
-Now you can run the script with `./population_change.sh` in your terminal.
+Now you can run the script with `./population_change.sh` in your terminal.<br>
 If you have some error messages, you need to tackle them, read the error and proof read your code.
 
 
@@ -292,7 +308,7 @@ Now that the first part of the script is working, let's add the rest of the comm
 > You can comment the lines of your script to avoid downloading the data again. 
 > You can use the `#` character at the beginning of a line to comment it. A line that is commented is not seen as a command by the shell, it will be ignored.
 
-1️⃣ Reproject Population Rasters
+1️⃣ Reproject Population Rasters <br>
 Add the commands to reproject the population rasters to EPSG:31256.
 
 > [!TIP]
@@ -300,14 +316,16 @@ Add the commands to reproject the population rasters to EPSG:31256.
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    gdalwarp -s_srs EPSG:4326 -t_srs EPSG:${t_proj} data/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.tif data/population_${year_start}_reprojected.tif
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    gdalwarp -s_srs EPSG:4326 -t_srs EPSG:${t_proj} data/GHS_POP_E${year_start}_GLOBE_R2023A_4326_3ss_V1_0_R${row}_C${column}.tif data/population_${year_start}_reprojected.tif
+>    ```
+
+<br>
 </details>
 
-2️⃣ Reproject Area Border
+2️⃣ Reproject Area Border <br>
 Add the command to reproject the area border GeoJSON file to EPSG:31256.
 
 > [!TIP]
@@ -315,14 +333,16 @@ Add the command to reproject the area border GeoJSON file to EPSG:31256.
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    ogr2ogr -s_srs EPSG:4326 -t_srs EPSG:${t_proj} data/${area}_border_reprojected.geojson data/${area}_border.geojson
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    ogr2ogr -s_srs EPSG:4326 -t_srs EPSG:${t_proj} data/${area}_border_reprojected.geojson data/${area}_border.geojson
+>    ```
+
+<br>
 </details>
 
-3️⃣ Clip Population Rasters with Area Border
+3️⃣ Clip Population Rasters with Area Border <br>
 Add the commands to clip the reprojected population rasters with the reprojected area border.
 
 > [!TIP]
@@ -331,17 +351,19 @@ Add the commands to clip the reprojected population rasters with the reprojected
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    gdalwarp -cutline data/${area}_border_reprojected.geojson -cl ${area}_border -dstalpha -crop_to_cutline data/population_${year_start}_reprojected.tif data/population_${year_start}_${area}_clipped.tif
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    gdalwarp -cutline data/${area}_border_reprojected.geojson -cl ${area}_border -dstalpha -crop_to_cutline data/population_${year_start}_reprojected.tif data/population_${year_start}_${area}_clipped.tif
+>    ```
+
+<br>
 </details>
 
 🔁 Apply the same function on your other raster
 
 
-4️⃣ Calculate Population Difference
+4️⃣ Calculate Population Difference <br>
 Add the command to calculate the population difference between the two clipped population rasters.
 
 > [!TIP]
@@ -349,11 +371,13 @@ Add the command to calculate the population difference between the two clipped p
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    gdal_calc.py -A data/population_${year_end}_${area}_clipped.tif -B data/population_${year_start}_${area}_clipped.tif --outfile=output/population_change_${year_start}_${year_end}_${area}.tif --calc="A-B" --format="GTiff"
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    gdal_calc.py -A data/population_${year_end}_${area}_clipped.tif -B data/population_${year_start}_${area}_clipped.tif --outfile=output/population_change_${year_start}_${year_end}_${area}.tif --calc="A-B" --format="GTiff"
+>    ```
+
+<br>
 </details>
 
 
@@ -366,20 +390,22 @@ Add the command to get the statistics of the population change raster.
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    echo gdalinfo -stats output/population_change_${year_start}_${year_end}_${area}.tif
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    echo gdalinfo -stats output/population_change_${year_start}_${year_end}_${area}.tif
+>    ```
+
+<br>
 </details>
 
 
-## 3. 🧪 Test the Script
-Save your changes with `:wq!` and run the script in your terminal.
+## 3. 🧪 Test the Script 
+Save your changes with `:wq` and run the script in your terminal.<br>
 Fix any errors that occur and test the script again.
 
 
-## 4. 🧹 Clean Up
+## 4. 🧹 Clean Up 
 After running the script, you can clean up the working directory by removing the downloaded files and the temporary files.
 
 > [!TIP]
@@ -388,11 +414,13 @@ After running the script, you can clean up the working directory by removing the
 
 <details>
     <summary>💡 Are you blocked? </summary>
-    <br>
-    ```bash
-    rm -r data
-    ```
-    <br>
+<br>
+
+>    ```bash
+>    rm -r data
+>    ```
+
+<br>
 </details>
 
 
