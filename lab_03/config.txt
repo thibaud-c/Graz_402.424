@@ -1,0 +1,14 @@
+# Configuration File for Estimating Population Change in Styria (1990-2025)
+# selecting an area, it could be any name that are recognized by Nominatim  
+area=styria
+
+# years to compare, GHSL data is available every 5 years from 1975 to 2030
+year_start=1990
+year_end=2025
+
+# Tile numbers to download from GHSL, the tile is a 1x1 degree grid
+row=5
+column=20
+
+# Projection for the output data
+t_proj=31256
