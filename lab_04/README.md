@@ -313,7 +313,7 @@ SELECT * FROM population TABLESAMPLE SYSTEM (1); -- 🦫
 By default DBeaver will pre-query the data to display the first 200 rows to avoid overloading the system. You can scroll down in the `grid` or `text` panel to load more rows. You can change this default value in the preferences. <br>
 
 
-<font color="orange">🤔 How the population data looks like? Distribution? Coverage? What should be the next steps? etc. </font>
+<text color="orange">🤔 How the population data looks like? Distribution? Coverage? What should be the next steps? etc. </text>
 
 
 ## 🌍 Import the OSM data
@@ -363,7 +363,7 @@ To import the OSM data, we will use the `osm2pgsql` command with the following p
 > If you have some problem during the import you can add the parameter `-C 2048`. The `-C` option specifies the amount of memory to use for caching (in MB). You can adjust this value based on your machine's available memory.
 
 ```diff
-! 🤔 What method did we learn to get the spatial data about a specific region ?
+🤔 What method did we learn to get the spatial data about a specific region ?
 ```
 
 <details>
@@ -411,8 +411,9 @@ You can now copy paste the bounding box coordinates in your command to import th
 
 The process should take a few minutes (> 10min). You can check the progress in DBeaver by refreshing the database connection (right click on the database ➡️ refresh)
 
-
-[🏠 Explore the OSM data that you just imported!](color:darkorange)
+```diff
+🏠 Explore the OSM data that you just imported!
+```
 
 <br>
 
