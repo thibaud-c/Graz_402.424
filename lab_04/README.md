@@ -362,7 +362,7 @@ To import the OSM data, we will use the `osm2pgsql` command with the following p
 > [!TIP]
 > If you have some problem during the import you can add the parameter `-C 2048`. The `-C` option specifies the amount of memory to use for caching (in MB). You can adjust this value based on your machine's available memory.
 
-<font color="orange">🤔 What method did we learn to get the spatial data about a specific region ? </font>
+! 🤔 What method did we learn to get the spatial data about a specific region ?
 
 <details>
     <summary>💡 Are you blocked? </summary>
@@ -410,7 +410,7 @@ You can now copy paste the bounding box coordinates in your command to import th
 The process should take a few minutes (> 10min). You can check the progress in DBeaver by refreshing the database connection (right click on the database ➡️ refresh)
 
 
-<font color="orange">🏠 Explore the OSM data that you just imported! </font>
+[🏠 Explore the OSM data that you just imported!](color:darkorange)
 
 <br>
 
