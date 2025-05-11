@@ -362,7 +362,9 @@ To import the OSM data, we will use the `osm2pgsql` command with the following p
 > [!TIP]
 > If you have some problem during the import you can add the parameter `-C 2048`. The `-C` option specifies the amount of memory to use for caching (in MB). You can adjust this value based on your machine's available memory.
 
+```diff
 ! 🤔 What method did we learn to get the spatial data about a specific region ?
+```
 
 <details>
     <summary>💡 Are you blocked? </summary>
