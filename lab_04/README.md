@@ -89,7 +89,9 @@ docker run --name postgis-db -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postg
 6. In the DBeaver database navigator, you should now see your PostGIS database listed under the "Database" section
 
 <br>
-<font color="orange">👀 Explore what is already present in the database!</font> 
+```diff
+! 👀 Explore what is already present in the database!
+```
 <br>
 
 ## 🌆 Import of the population data within PostgreSQL/PostGIS
@@ -124,7 +126,9 @@ head -n 10 aut_general_2020.csv # 🐧
 > The `-n` option specifies the number of lines to display. In this case, we are displaying the first 10 lines of the file. You can change this number to display more or fewer lines as needed.
 
 <br>
-<font color="orange">👀 What columns are present in the population file? What is the geometry? What is the CRS? </font>
+```diff
+! 👀 What columns are present in the population file? What is the geometry? What is the CRS?
+```
 <br>
 
 ### 🐘 Import the population data into PostGIS
@@ -144,7 +148,9 @@ Here is the parameters your will need for your `ogr2ogr` command:
 - `-nln `: specifies the name of the table to create in the database.
 - `-overwrite`: overwrites the table if it already exists.
 <br>
-<font color="orange">🤔 What are our database parameters to create the connection string?</font>
+```diff
+! 🤔 What are our database parameters to create the connection string?
+```
 <br>
 
 `dbname`, `user`, `password` should be the same as the ones you used to create the container. If you didn't change them, they are `postgres` for all of them, which is the default value.<br>
@@ -183,7 +189,10 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' pos
 
 There process should take a few minutes. You can check the progress in DBeaver by refreshing the database connection (right click on the database ➡️ refresh). Once the import is finished, you should see a new table called `population` in the database navigator. <br>
 
-<font color="grey">(💡 Launch now the import of the OSM data in the background, it will take a while...)</font> <br>
+```diff
+# (💡 Launch now the import of the OSM data in the background, it will take a while...)
+```
+<br>
 
 ### 🦫 Check the data with simple SQL query
 
@@ -204,7 +213,9 @@ SELECT COUNT(*) FROM population; -- 🦫
 > [!NOTE]
 > The `COUNT(*)` function is an aggregate function and returns the total number of rows in the table. Because `COUNT` returns a single value, you don't need to use the `LIMIT` clause.
 
-<font color="orange">🤔 How many rows did we imported in our database? Is it impressive for the execution time? </font>
+```diff
+! 🤔 How many rows did we imported in our database? Is it impressive for the execution time?
+```
 Now you understand why we need to use `LIMIT` in our first query. If we had not used it, the query would have returned all rows in the table, which could be a lot of data and take a long time to process!
 
 ### 🧹 Tailoring your data
@@ -213,7 +224,9 @@ Now that we have imported the population data, we need to check the data types o
 We you execute a simple SQL query, the result will be displayed in a table format. You can see the column names and their data types in the result set. 
 
 <br>
-<font color="orange">🤔 What datatype are present in your columns?</font>
+```diff
+! 🤔 What datatype are present in your columns?
+```
 <br>
 
 It seems that the data types are not correct. The `latitude`, `longitude`, and `aut_general_2020` columns should be of type `double precision` instead of `varchar`. We need to create new columns with the correct data types and copy the data from the old columns to the new ones. We often create new columns instead of modifying the existing ones to avoid data loss and keep the original data intact.
@@ -242,7 +255,9 @@ SET pop_2020 = aut_general_2020::double precision,
 > The `::` operator is used to cast a value from one data type to another. In this case, we are casting the values from `varchar` to `double precision`. This is necessary because the original columns are of type `varchar`, and we need to convert them to the correct data type before copying them to the new columns.
 
 <br>
-<font color="orange">🤔 Let's check if everything is ok by running a simple SQL query to see the first 10 rows of the population table again. Does everything looks good?</font>
+```diff
+! 🤔 Let's check if everything is ok by running a simple SQL query to see the first 10 rows of the population table again. Does everything looks good?
+```
 <br>
 
 If everything is ok, we can drop the old columns using the `ALTER TABLE` command with the `DROP COLUMN` clause. The `DROP COLUMN` clause is used to remove one or more columns from a table.
@@ -276,7 +291,10 @@ ALTER TABLE population
 ADD geometry geometry(Point,4326); -- 🦫
 ```
 
-<font color="orange">🤔 Is the new column created?</font>
+```diff
+! 🤔 Is the new column created?
+```
+<br>
 
 Before create the point geometry, we need to check if the `latitude` and `longitude` columns are not null. If they are null, we cannot create a point geometry from them. To do this, we can use the `WHERE` clause in the `SELECT` statement to filter the rows where either `latitude` or `longitude` is null. We can use the `IS NULL` operator to check if a column is null. 
 
@@ -313,7 +331,9 @@ SELECT * FROM population TABLESAMPLE SYSTEM (1); -- 🦫
 By default DBeaver will pre-query the data to display the first 200 rows to avoid overloading the system. You can scroll down in the `grid` or `text` panel to load more rows. You can change this default value in the preferences. <br>
 
 
-<text color="orange">🤔 How the population data looks like? Distribution? Coverage? What should be the next steps? etc. </text>
+```diff
+! 🤔 How the population data looks like? Distribution? Coverage? What should be the next steps? etc.
+```
 
 
 ## 🌍 Import the OSM data
@@ -363,7 +383,7 @@ To import the OSM data, we will use the `osm2pgsql` command with the following p
 > If you have some problem during the import you can add the parameter `-C 2048`. The `-C` option specifies the amount of memory to use for caching (in MB). You can adjust this value based on your machine's available memory.
 
 ```diff
-🤔 What method did we learn to get the spatial data about a specific region ?
+! 🤔 What method did we learn to get the spatial data about a specific region ?
 ```
 
 <details>
@@ -388,7 +408,7 @@ To import the OSM data, we will use the `osm2pgsql` command with the following p
 You can now copy paste the bounding box coordinates in your command to import the OSM data! 
 
 <details>
-    <summary>💡 Are you blocked? </summary
+    <summary>💡 Are you blocked? </summary>
 <br>
 
 > 🐧
@@ -412,7 +432,7 @@ You can now copy paste the bounding box coordinates in your command to import th
 The process should take a few minutes (> 10min). You can check the progress in DBeaver by refreshing the database connection (right click on the database ➡️ refresh)
 
 ```diff
-🏠 Explore the OSM data that you just imported!
+! 🏠 Explore the OSM data that you just imported!
 ```
 
 <br>
