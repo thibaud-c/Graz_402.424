@@ -29,7 +29,7 @@
   - [OSM data](https://download.geofabrik.de/europe/austria-latest.osm.pbf)
 
 > [!TIP]
-
+>
 > 🌍 **OSM data download**
 > ```bash
 > curl -L "URL" --output austria-latest.osm.pbf # 🐧
@@ -78,7 +78,6 @@ docker run --name postgis-db -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postg
 1. Open DBeaver and create a new connection (💻)
 2. Select PostgreSQL as the database type
 3. In the connection settings (💽), enter the following details:
-   - 
    - **Host**: `localhost`
    - **Port**: `5432`
    - **Database**: `postgres` (or any other database name you want to use)
@@ -86,9 +85,9 @@ docker run --name postgis-db -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postg
    - **Password**: `postgres` (or the password you set when creating the container)
 4. Click on the "Test Connection" button to verify that the connection is successful
 5. If the connection is successful, click "Finish" to create the connection
-6. In the DBeaver database navigator, you should now see your PostGIS database listed under the "Database" section
+6. In the DBeaver database navigator, you should now see your PostGIS database listed under the "Database" section <br>
 
-<br>
+
 ```diff
 ! 👀 Explore what is already present in the database!
 ```
@@ -110,7 +109,6 @@ Your population data is in a zip file. You need to unzip it before using it. You
 
 <br>
 </details>
-<br>
 
 ### 👀 Sneak peek on the population data
 
@@ -123,9 +121,8 @@ head -n 10 aut_general_2020.csv # 🐧
 ```
 
 > [!NOTE]
-> The `-n` option specifies the number of lines to display. In this case, we are displaying the first 10 lines of the file. You can change this number to display more or fewer lines as needed.
+> The `-n` option specifies the number of lines to display. In this case, we are displaying the first 10 lines of the file. You can change this number to display more or fewer lines as needed. <br>
 
-<br>
 ```diff
 ! 👀 What columns are present in the population file? What is the geometry? What is the CRS?
 ```
@@ -146,12 +143,14 @@ Here is the parameters your will need for your `ogr2ogr` command:
   - `password`: the password for the user (e.g., `postgres`).
 - `file_name_to_upload`: the input file to be imported.
 - `-nln `: specifies the name of the table to create in the database.
-- `-overwrite`: overwrites the table if it already exists.
-<br>
+- `-overwrite`: overwrites the table if it already exists.<br>
+
+
 ```diff
 ! 🤔 What are our database parameters to create the connection string?
 ```
 <br>
+
 
 `dbname`, `user`, `password` should be the same as the ones you used to create the container. If you didn't change them, they are `postgres` for all of them, which is the default value.<br>
 
@@ -166,6 +165,7 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' pos
 
 > [!TIP]
 > the connection string to the database will look like this:
+>
 > ```bash
 > PG:"host=<container_ip> dbname=postgres user=postgres password=postgres" # 💽
 > ```
@@ -221,9 +221,8 @@ Now you understand why we need to use `LIMIT` in our first query. If we had not 
 ### 🧹 Tailoring your data
 
 Now that we have imported the population data, we need to check the data types of the columns. 
-We you execute a simple SQL query, the result will be displayed in a table format. You can see the column names and their data types in the result set. 
+We you execute a simple SQL query, the result will be displayed in a table format. You can see the column names and their data types in the result set. <br>
 
-<br>
 ```diff
 ! 🤔 What datatype are present in your columns?
 ```
@@ -242,6 +241,7 @@ ADD lon double precision; -- 🦫
 ```
 > [!NOTE]
 > The `double precision` data type is used to store floating-point numbers with double precision. It is commonly used for storing geographic coordinates (latitude and longitude) and other numerical values that require high precision. <br>
+
 Now we will use the `UPDATE` command to copy the data from the old columns to the new ones. The `UPDATE` command is used to modify existing records in a table. We will use the `SET` clause to specify the new values for the columns.
 
 ```sql
@@ -252,9 +252,8 @@ SET pop_2020 = aut_general_2020::double precision,
 ```
 
 > [!NOTE]
-> The `::` operator is used to cast a value from one data type to another. In this case, we are casting the values from `varchar` to `double precision`. This is necessary because the original columns are of type `varchar`, and we need to convert them to the correct data type before copying them to the new columns.
+> The `::` operator is used to cast a value from one data type to another. In this case, we are casting the values from `varchar` to `double precision`. This is necessary because the original columns are of type `varchar`, and we need to convert them to the correct data type before copying them to the new columns. <br>
 
-<br>
 ```diff
 ! 🤔 Let's check if everything is ok by running a simple SQL query to see the first 10 rows of the population table again. Does everything looks good?
 ```
@@ -284,7 +283,7 @@ RENAME COLUMN lon TO longitude; -- 🦫
 Our columns are now ready! However, `latitude` and `longitude` are still not in the correct format, both are still only numbers and not considered as a geometry by PostGIS. We need to add a geometry column to the table to store the geographic coordinates as a point. The `geometry` data type is used to store geometric data, such as points, lines, and polygons.
 To do this, we should add a new column of type `geometry` to the table. The `geometry` data type is a special data type used in PostGIS to store geometric data. It can store various types of geometric data, including points, lines, and polygons. In this case, we will use it to store the latitude and longitude as a point.
 
-we will use the `ALTER TABLE` command to add a new column called `geometry` to the table. The `geometry` column will be of type `geometry(Point,4326)`, which means it will store points in the WGS 84 coordinate reference system (CRS). We could also imagine to use a CRS that is more suitable for our region, but we will keep it simple for now. 
+We will use the `ALTER TABLE` command to add a new column called `geometry` to the table. The `geometry` column will be of type `geometry(Point,4326)`, which means it will store points in the WGS 84 coordinate reference system (CRS). We could also imagine to use a CRS that is more suitable for our region, but we will keep it simple for now. 
 
 ```sql
 ALTER TABLE population
@@ -325,7 +324,7 @@ SELECT * FROM population TABLESAMPLE SYSTEM (1); -- 🦫
 ```
 
 > [!NOTE]
-> The `SYSTEM` method is used to sample rows based on the physical storage of the table. This method is faster than other sampling methods because it does not require scanning the entire table alternatively, you can use the `BERNOULLI` method, which samples rows randomly. The `BERNOULLI` method is slower than the `SYSTEM` method because it requires scanning the entire table to determine which rows to sample.
+> The `SYSTEM` method is used to sample rows based on the physical storage of the table. This method is faster than other sampling methods because it does not require scanning the entire table alternatively, you can use the `BERNOULLI` method, which samples rows randomly. The `BERNOULLI` method is slower than the `SYSTEM` method because it requires scanning the entire table to determine which rows to sample. <br>
 > The `(1)` specifies the percentage of rows to sample. In this case, we are sampling 1% of the rows in the table. You can adjust this value to sample more or fewer rows as needed.
 
 By default DBeaver will pre-query the data to display the first 200 rows to avoid overloading the system. You can scroll down in the `grid` or `text` panel to load more rows. You can change this default value in the preferences. <br>
@@ -349,19 +348,18 @@ You can install `osm2pgsql` in your Linux container. You should already know how
     <summary>💡 Are you blocked? </summary>
 <br>
 
-> 🐧
 > ```bash
-> apt-get install osm2pgsql
+> apt-get install osm2pgsql # 🐧
 > ```
 
 <br>
 </details>
-<br>
 
 > [!TIP]
 > If you are facing some issue with the installation, you can try to update and upgrade your system first (🐧):
+>
 > ```bash
-> sudo apt-get update
+> sudo apt-get update # 🐧
 > sudo apt-get upgrade
 > ```
 
@@ -375,12 +373,13 @@ To import the OSM data, we will use the `osm2pgsql` command with the following p
 - `--host`: specifies the IP address of the PostgreSQL server (e.g., the same IP address of the Docker container we used for the import of the population)
 - `--port`: specifies the port number of the PostgreSQL server (e.g., `5432`)
 - `--input-reader`: specifies the input format (e.g., `pbf` for PBF files)
-- `--slim`: uses a slim mode for importing data, which reduces memory usage. This will allow to run the import process on your laptop without running out of memory
 - `--bbox`: specifies the bounding box for the area to import (e.g., `xmin,ymin,xmax,xmin`). We don't want to import all of OSM data, it will be too heavy. We will only import the data for Styria. 
 - `pbf_file_name`: the input file to be imported
 
 > [!TIP]
-> If you have some problem during the import you can add the parameter `-C 2048`. The `-C` option specifies the amount of memory to use for caching (in MB). You can adjust this value based on your machine's available memory.
+> If you have some problem during the import you can add the parameter `-C 2048`. The `-C` option specifies the amount of memory to use for caching (in MB). You can adjust this value based on your machine's available memory. <br>
+> Alternatively, you can use the option `--slim` for importing data, which reduces memory usage. This will allow to run the import process on your laptop without running out of memory. However, it will also create additional tables in the database to store the data, which will increase the size of the database. <br>
+
 
 ```diff
 ! 🤔 What method did we learn to get the spatial data about a specific region ?
@@ -390,20 +389,19 @@ To import the OSM data, we will use the `osm2pgsql` command with the following p
     <summary>💡 Are you blocked? </summary>
 <br>
 
-> 🐧
 > ```bash
-> curl 'https://nominatim.openstreetmap.org/search?q=Steiermark&format=json&limit=1'
+> curl 'https://nominatim.openstreetmap.org/search?q=Steiermark&format=json&limit=1' # 🐧
 > ```
->
+
 > [!TIP]
-> You can use `jq` to extract only the bounding box coordinates 
+> You can use `jq` to extract only the bounding box coordinates
+>
 > ```bash
-> curl -s 'https://nominatim.openstreetmap.org/search?q=Steiermark&format=json&limit=1' | jq '.[0].boundingbox'
+> curl -s 'https://nominatim.openstreetmap.org/search?q=Steiermark&format=json&limit=1' | jq '.[0].boundingbox' # 🐧
 > ```
 
 <br>
 </details>
-<br>
 
 You can now copy paste the bounding box coordinates in your command to import the OSM data! 
 
@@ -411,23 +409,20 @@ You can now copy paste the bounding box coordinates in your command to import th
     <summary>💡 Are you blocked? </summary>
 <br>
 
-> 🐧
 > ```bash
-> osm2pgsql \
+> osm2pgsql \ # 🐧
 >     --database postgres \
 >     --user postgres \
 >     --password \
 >     --host <container_ip> \
 >     --port 5432 \
 >     --input-reader=pbf \
->     --slim \
 >     --bbox xmin,ymin,xmax,xmin \ # replace with the bbox you got from the previous command
 >     austria-latest.osm.pbf
 > ```
 
 <br>
 </details>
-<br>
 
 The process should take a few minutes (> 10min). You can check the progress in DBeaver by refreshing the database connection (right click on the database ➡️ refresh)
 
