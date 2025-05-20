@@ -27,12 +27,12 @@ SELECT COUNT(*) FROM population; -- 🦫
 ```
 
 This query counts the number of rows in the `population` table, which can be slow if the table is large. <br>
-To speed up this query, we can create an index on the `latitude` column, which is used in the `population` table. An index is a data structure that improves the speed of data retrieval operations on a database table at the cost of additional space and slower writes.
+To speed up this query, we can create an index on the `pop_2020` column, which is used in the `population` table. An index is a data structure that improves the speed of data retrieval operations on a database table at the cost of additional space and slower writes.
 
 ```sql
-CREATE INDEX latitude_idx -- 🦫 name of the index
+CREATE INDEX pop_2020_idx -- 🦫 name of the index
 ON population -- on the population table 
-USING btree (latitude); -- using a B-tree index on the latitude column
+USING btree (pop_2020); -- using a B-tree index on the latitude column
 ```
 
 Now, when we run the query again, it will be much faster because the database can use the index to quickly find the rows that match the query.
@@ -52,8 +52,8 @@ The speed difference can be significant, especially for large datasets. The firs
 > Let's try it out!
 >
 >```sql 
-> EXPLAIN ANALYZE SELECT COUNT(Latitude) FROM population; -- 🦫 using the index that we created
-> EXPLAIN ANALYZE SELECT COUNT(Longitude) FROM population; -- 🦫 not using the index because the index has been created only on the column latitude
+> EXPLAIN ANALYZE SELECT COUNT(Latitude) FROM population; -- 🦫 not using the index because the index has been created only on the column latitude
+> EXPLAIN ANALYZE SELECT COUNT(pop_2020) FROM population; -- 🦫 using the index that we created
 > ```
 
 > [!TIP]
@@ -136,7 +136,7 @@ WHERE osm.name = 'Steiermark'; -- filter the results to only include the polygon
 In SQL, the reprojection of geometries is done using the `ST_Transform` function. You can use it on the fly to transform the geometry from one coordinate system to another, or you can create a new column in your table to store the transformed geometry.
 
 ```sql
-ST_Transform(geometry, EPSG_CODE) -- the EPSG code is called SRID code in SQL
+... ST_Transform(geometry, EPSG_CODE) ...; -- the EPSG code is called SRID code in SQL
 ```
 
 ```diff
@@ -172,10 +172,10 @@ DELETE statement can be dangerous, so it is always a good idea to test your quer
 ```sql
 DELETE FROM population pop -- 🦫 delete from the population table
 USING planet_osm_polygon osm -- using the OSM polygon table, this is like a join
-WHERE ...
+WHERE ...;
 ```
 
-[!IMPORTANT]
+> [!IMPORTANT]
 > Don't forget to use a where clause to filter the records you want to delete, otherwise you will delete all records in the table!
 
 ```diff
@@ -227,7 +227,7 @@ Deleting all data `planet_osm_polygon` to keep only the buildings might be too e
 > ```sql
 > SELECT * -- 🦫 select all columns
 > FROM planet_osm_polygon -- from the OSM polygon table
-> WHERE building IS NOT NULL -- where the building column is not null
+> WHERE building IS NOT NULL; -- where the building column is not null
 
 <br>
 </details>
@@ -261,7 +261,7 @@ SQL is very powerful, we can create a new table from the result of a query using
 
 ```sql
 CREATE TABLE buildings AS -- 🦫 
-SELECT ....
+SELECT ...;
 ```
 
 ```diff
