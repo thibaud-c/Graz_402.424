@@ -302,7 +302,9 @@ SELECT * FROM population
 WHERE latitude IS NULL OR longitude IS NULL; -- 🦫
 ```
 
-It seems that everything is alright. Now we will use the `UPDATE` command to set the values of the `geometry` column based on the `latitude` and `longitude` columns. We will use the `ST_SetSRID` and `ST_MakePoint` functions to create a point geometry from the latitude and longitude values.
+It seems that everything is alright. Now we will use the `UPDATE` command to set the values of the `geometry` column based on the `latitude` and `longitude` columns. The `ST_SetSRID` function sets the spatial reference identifier (SRID) for the geometry, and the `ST_MakePoint` function creates a point geometry from the given coordinates. The SRID 4326 is used for the WGS 84 coordinate reference system, which is commonly used for geographic data. <br>
+The SRID in SQL is corresponding to the EPSG code 
+
 
 ```sql
 UPDATE population pop
