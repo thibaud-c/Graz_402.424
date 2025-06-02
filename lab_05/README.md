@@ -270,7 +270,7 @@ SELECT ...;
 
 > [!NOTE]
 > We have to assess a spatial relation between the geometry of Styria and the buildings geometry. The problem is that both of them are in the same table, so we need to use a self-join to filter the buildings that are within the polygon of Styria! In SQL you cannot join a table with itself out-of-the-box, but you can use an alias to create a temporary name for the table. The alias is created by using the `AS` keyword followed by the alias name. When you want to refer to the table in the query, you can use the alias name instead of the original table name. <br>
-> To use the attibutes of the table with the alias, you need to prefix the column names with the alias name. For example, if you have a table called `MY_TABLE` and you want to create an alias called `my_alias`, you can do it like this:
+> To use the attributes of the table with the alias, you need to prefix the column names with the alias name. For example, if you have a table called `MY_TABLE` and you want to create an alias called `my_alias`, you can do it like this:
 
 >
 >```sql
