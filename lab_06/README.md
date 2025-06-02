@@ -130,10 +130,10 @@ The logic of the query is as follows:
 To achieve this, we can use the following SQL query:
 
 ```sql
-UPDATE population AS p -- specify the table to update with an alias
+UPDATE population p -- specify the table to update with an alias
 SET    building_id = ( -- set the building_id to the result of the subquery
     SELECT  b.osm_id -- select the OSM ID of the nearest building
-    FROM    buildings AS b -- specify the buildings table with an alias
+    FROM    buildings b -- specify the buildings table with an alias
     WHERE   ST_DWithin(ST_Transform(p.geom, 3857), b.geometry, 50) -- check if the population point is within 50 meters of the building
     ORDER BY ST_Transform(p.geom, 3857) <-> b.geometry   -- KNN operator to order by distance
     LIMIT 1 -- limit the result to the nearest building
@@ -198,7 +198,7 @@ FROM planet_osm_polygon
 WHERE building = 'fire_station'; -- filter for fire stations
 ```
 
-Let's also check if the `anemity` column in the `buildings` table is consistent over our dataset. <br>
+Let's also check if the `amenity` column in the `buildings` table is consistent over our dataset. <br>
 
 ```sql
 SELECT DISTINCT amenity FROM buildings WHERE amenity LIKE '%fire%'; -- check distinct values in the amenity column that contain 'fire'
@@ -304,7 +304,7 @@ Now we need to update the `buildings` table with the missing fire stations. We c
 Great! We now can easily identify the fire stations from the table `buildings`!
 
 
-3. ** Import the fire stations in the `fire_stations` table **:
+4. ** Import the fire stations in the `fire_stations` table **:
 
 To import data in an existing table we can use the `INSERT INTO ... SELECT` statement. This allows us to select data from one or more source tables and insert it into the target table. The syntax is as follows:
 
@@ -349,7 +349,7 @@ SELECT COUNT(*) FROM fire_stations; -- count the number of rows in the fire_stat
 ! 🤔 How many fire stations are in the `fire_stations` table? How does this compare with the number of fire stations in the `planet_osm_point` and `planet_osm_polygon` tables?
 ```
 
-4. ** Handling duplicates **:
+5. ** Handling duplicates **:
 
 To check if there are duplicates in the `fire_stations` table, we can use the `COUNT` function along with a `GROUP BY` clause to group the rows by the `osm_id` and count the occurrences. If the count is greater than 1 for any `osm_id`, it means there are duplicates. <br>
 
@@ -364,7 +364,7 @@ HAVING COUNT(*) > 1; -- filter for duplicates
 ! 🤔 Do we have duplicate in our data? Why is it the case? 
 ```
 
-5. ** Create a spatial index for the fire stations table **:
+6. ** Create a spatial index for the fire stations table **:
 
 ```
 ! 🤔 What indexes could be useful for our table `fire_stations`? 
@@ -373,7 +373,7 @@ HAVING COUNT(*) > 1; -- filter for duplicates
 
 ## 🚒 Create Risk Zones Around Buildings Based on Fire Station Proximity
 
-To create risk zones around buildings based on fire station proximity, we will follow these steps:
+
 1. **Add a fire risk column to the buildings table**: 
 
 We will add a new column to the `buildings` table to store the fire risk level. This column will be of type `int` to represent different risk levels (e.g., 1 for high risk, 2 for medium risk, and 3 for low risk).
@@ -456,3 +456,15 @@ ORDER BY fire_risk;
 ```diff
 ! 🤔 How many people are in each risk zone? How does this compare with the total population?
 ```
+
+## 🚒 Visualization
+
+You can visualize the risk zones and fire stations directly in QGIS. Open a project, and add a new data source `PostgreSQL`. Connect to your database and add the `fire_stations` and `buildings` layers. You can then use the QGIS styling tools to visualize the risk zones based on the `fire_risk` column in the `buildings` table.
+
+```diff
+! 🤔 Are the results looking as expected? Are there any surprises?
+! 🤔 What could we do to improve the results?
+```
+
+
+💪 Congratulations! You have completed this exercise! 🎉 
