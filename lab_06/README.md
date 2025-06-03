@@ -304,7 +304,7 @@ We can select these points with a subquery that checks if the location of the fi
 >     ) AS fire_station_locations -- Create an alias for the subquery
 >   ON ST_DWithin(b.geometry, fire_station_locations.way, 10) -- Check if the building is within 10 meters of a fire station point
 > WHERE  b.amenity != 'fire_station' OR b.amenity IS NULL -- filter the buildings to keep only the ones that are not already marked as fire stations
-> GROUP BY b.osm_id -- Group by the OSM ID to avoid duplicates
+> GROUP BY b.osm_id; -- Group by the OSM ID to avoid duplicates
 > ```
 
 <br>
@@ -322,8 +322,11 @@ The update could be much shorter, as we can use the `FROM` clause to join the `b
 > FROM   planet_osm_point AS p
 > WHERE  p.amenity = 'fire_station'                 -- candidate points
 >  AND  ST_DWithin(b.geometry, p.way, 10)          -- ≤ 10 m test
->  AND  (b.amenity IS NULL OR b.amenity <> 'fire_station');
+>  AND  (b.amenity IS NULL OR b.amenity <> 'fire_station'); -- only update if the amenity is not already set to 'fire_station'
 > ```
+
+> [!NOTE]
+> The operator `<>` is used to check if the value is not equal to 'fire_station'. This is a common way to filter out rows that already have the desired value. <br>
 
 <br>
 </details>
