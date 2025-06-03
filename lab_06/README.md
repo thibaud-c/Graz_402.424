@@ -29,7 +29,7 @@
 > CREATE INDEX idx_buildings_osm_id ON buildings USING btree (osm_id);
 > CREATE INDEX idx_population_ogc_fid ON population USING btree (ogc_fid);
 > ```
->
+
 > [!NOTE]
 > The `GIST` index is particularly useful for spatial data, as it allows for efficient querying of geometric shapes and their relationships.
 > The `btree` index is used for standard data types and is effective for equality and range queries.
@@ -39,7 +39,8 @@
 
 ## 🌆 Assign Population Points to Buildings
 
-To assign population points to buildings, we will use the `ST_Intersects` function to find which population points fall within the boundaries of buildings. We will also handle cases where population points are not assigned to any building by finding the nearest building.<br>
+To assign population points to buildings, we will use the `ST_Within` function to find which population points fall within the boundaries of buildings. We will also handle cases where population points are not assigned to any building by finding the nearest building.<br><br>
+
 The approach could include the following steps:
 - Create a new column in the population table to store building IDs.
 - Update the population table with building IDs based on spatial intersection.
@@ -49,7 +50,13 @@ The approach could include the following steps:
 1. **Create a new column in the population table to store building IDs**:
 
 To create a new column in the `population` table to store the building IDs, we will use the `ALTER TABLE` command. <br>
+
+```diff
+! 🤔 What are the type of the osm_id? Can we enforce an UNIQUE condition? Maybe a NOT NULL?
+```
+
 The new column will be of type `bigint` to accommodate the OSM building IDs from the `buildings` table.
+
 
 <details>
     <summary>💡 Are you blocked? </summary>
@@ -66,7 +73,7 @@ The new column will be of type `bigint` to accommodate the OSM building IDs from
 
 2. **Update the population table with building IDs based on spatial intersection**:
 
-To update the `population` table with building IDs based on spatial intersection, we will use the `UPDATE` statement along with the `ST_Within` function. This function checks if the geometries of population points intersect with the geometries of buildings. We will also transform the population geometry to match the coordinate system of the buildings if necessary. <br>
+To update the `population` table with building IDs based on spatial intersection, we will use the `UPDATE` statement along with the `ST_Within` function. This function checks if the geometries of population points intersect with the geometries of buildings. We will also transform the population geometry to match the coordinate system of the buildings if necessary. <br><br>
 An update query looks like this:
 
 ```sql
@@ -87,6 +94,9 @@ WHERE condition;
 > FROM buildings osm_buildings -- specify the table to join with an alias
 > WHERE ST_Within(ST_Transform(pop.geometry, 3857), osm_buildings.geometry); -- check if the geometries intersect, transforming the population geometry to match the coordinate system of the buildings
 > ```
+
+> [!NOTE]
+> Here, we don't want to forget about transforming the population geometry to match the coordinate system of the buildings. The `ST_Transform` function is used to convert the geometry from one coordinate system to another. In this case, we are transforming the population geometry to EPSG:3857 (Web Mercator) to match the buildings geometry.
 
 <br>
 </details>
@@ -115,31 +125,58 @@ To verify how many population points have been assigned to buildings, we can use
 
 To handle population points that are not assigned to any building, we will use a KNN (K-Nearest Neighbors) approach to find the nearest building for each population point that does not have a `building_id`. A KNN query is a type of query that retrieves the nearest neighbors of a given point based on a distance metric. To do this, the `<->` operator can be used to find the nearest neighbor based on distance.<br> 
  
-To find the nearest building  for each population point that does not have a `building_id`, we can use a subquery to first identify the population points without a building ID, then join with the buildings table to find the closest building. <br>
-To find and update the nearest building for each population point that does not have a `building_id`, we can use a subquery to first identify the population points without a building ID. 
+Let's try this operator in a simple query to find the nearest building for a given population point. The `<->` operator is used to calculate the distance between two geometries, and it can be used in conjunction with the `ORDER BY` clause to sort the results by distance. <br>
 We will also use the `ST_DWithin` function to find buildings within a certain distance (e.g., 50 meters). This will help us to find the nearest building within a reasonable distance. <br>
+
+We also need a point geometry to test the query. Let's assume we have a population point with a geometry in the `population` table:
+> POINT (1643972.424 5977693.677)
+
+The query can look like this:
+
+```sql
+SELECT b.osm_id, b.geometry, ST_DISTANCE(ST_GEOMFROMTEXT('POINT (1702043.6124116578 5958911.292255648)', 3857), b.geometry) -- select the OSM ID and geometry of the nearest building
+FROM buildings b -- specify the buildings table with an alias
+WHERE ST_DWithin(ST_GEOMFROMTEXT('POINT (1702043.6124116578 5958911.292255648)', 3857), b.geometry, 50) -- check if the population point is within 50 meters of the building
+ORDER BY ST_GEOMFROMTEXT('POINT (1702043.6124116578 5958911.292255648)', 3857) <-> b.geometry -- order by distance using the KNN operator
+LIMIT 1; -- limit the result to the nearest building
+```
+
+> [!TIP]
+> The `ST_GEOMFROMTEXT` function is used to create a geometry from a Well-Known Text (WKT) representation. In this case, we are creating a point geometry from the WKT representation of the population point. The second argument specifies the SRID (Spatial Reference Identifier) of the geometry, which is 3857 in this case (Web Mercator). <br>
+
+To find the nearest building  for each population point that does not have a `building_id`, we can use the previvious query as a subquery to first identify the population points without a building ID (limited to 1 building), then join with the buildings table to find the closest building. <br>
 
 > [!NOTE]
 > A subquery is a query nested inside another query. It can be used to filter results, perform calculations, or retrieve data from another table. In this case, we will use a subquery to find the nearest building for each population point that does not have a `building_id`. <br>
 
 The logic of the query is as follows:
+
 - We want to update the `population` table and set the `building_id` to the nearest building's OSM ID.
 - We will use the `ST_DWithin` function to find buildings within a certain distance (e.g., 50 meters) of each population point.
 - We will order the results by distance to get the closest building.
 
 To achieve this, we can use the following SQL query:
 
-```sql
-UPDATE population p -- specify the table to update with an alias
-SET    building_id = ( -- set the building_id to the result of the subquery
-    SELECT  b.osm_id -- select the OSM ID of the nearest building
-    FROM    buildings b -- specify the buildings table with an alias
-    WHERE   ST_DWithin(ST_Transform(p.geom, 3857), b.geometry, 50) -- check if the population point is within 50 meters of the building
-    ORDER BY ST_Transform(p.geom, 3857) <-> b.geometry   -- KNN operator to order by distance
-    LIMIT 1 -- limit the result to the nearest building
-)
-WHERE  p.building_id IS NULL; -- only update population points that do not have a building_id
-```
+
+<details>
+    <summary>💡 Are you blocked? </summary>
+<br>
+
+> ```sql
+> UPDATE population p -- specify the table to update with an alias
+> SET    building_id = ( -- set the building_id to the result of the subquery
+>     SELECT  b.osm_id -- select the OSM ID of the nearest building
+>     FROM    buildings b -- specify the buildings table with an alias
+>     WHERE   ST_DWithin(ST_Transform(p.geom, 3857), b.geometry, 50) -- check if the population point is within 50 meters of the building
+>     ORDER BY ST_Transform(p.geom, 3857) <-> b.geometry   -- KNN operator to order by distance
+>     LIMIT 1 -- limit the result to the nearest building
+> )
+> WHERE  p.building_id IS NULL; -- only update population points that do not have a building_id
+> ```
+
+<br>
+</details>
+
 
 ```diff
 ! 🤔 How many population points have been assigned to buildings now? What can we do to make the results better?
@@ -273,33 +310,27 @@ We can select these points with a subquery that checks if the location of the fi
 <br>
 </details>
 
-Now we need to update the `buildings` table with the missing fire stations. We can use the `UPDATE` statement with a `FROM` clause to join the `buildings` table with the query we just created to collect the missing stations. This will allow us to set the `amenity` column to 'fire_station' for those buildings that are missing this information. <br>
+The update could be much shorter, as we can use the `FROM` clause to join the `buildings` table with the `planet_osm_point` table and update the `amenity` column directly. <br>
 
 <details>
     <summary>💡 Are you blocked? </summary>
 <br>
 
 > ```sql
-> UPDATE buildings
-> SET amenity = 'fire_station' -- Set the amenity column to 'fire_station'
-> FROM ( -- create a subquery to identify the correct building to update
->   SELECT b.osm_id
->   FROM buildings b
->   JOIN (
->       SELECT way 
->       FROM planet_osm_point 
->       WHERE amenity = 'fire_station'
->       ) AS fire_station_locations
->     ON ST_DWithin(b.geometry, fire_station_locations.way, 10) 
->   WHERE  b.amenity != 'fire_station' OR b.amenity IS NULL
->   GROUP BY b.osm_id
-> ) AS missing_stations -- name the subquery
-> WHERE buildings.osm_id = missing_stations.osm_id; -- update the identified building by id 
+> UPDATE buildings AS b
+> SET    amenity = 'fire_station'
+> FROM   planet_osm_point AS p
+> WHERE  p.amenity = 'fire_station'                 -- candidate points
+>  AND  ST_DWithin(b.geometry, p.way, 10)          -- ≤ 10 m test
+>  AND  (b.amenity IS NULL OR b.amenity <> 'fire_station');
 > ```
 
 <br>
 </details>
 
+```diff
+! 🤔 Is this approach realistic, what could be the risk of this simplification? 
+```
 
 Great! We now can easily identify the fire stations from the table `buildings`!
 
@@ -314,6 +345,9 @@ SELECT col1, col2, col3 -- the columns to select from the source table
 FROM source_table -- the source table to select from
 WHERE condition; -- optional condition to filter the data
 ```
+
+> [!TIP]
+> The `INSERT INTO ... SELECT` statement is a powerful way to insert data into a table from another table or query. It allows you to select specific columns and filter the data as needed. <br> Here, you are creating a new entry (i.e., a new row) in the `fire_stations` table for each fire station found in the `buildings` table. <br>
 
 ```diff
 ! 🤔 What should the query look like?
