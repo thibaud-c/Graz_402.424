@@ -1,0 +1,36 @@
+[Server]
+# Accept connections on this subnet (default accepts on all)
+HttpHost = "0.0.0.0"
+
+# Accept connections on this port
+HttpPort = 9000
+
+# String to return for Access-Control-Allow-Origin header
+# CORSOrigins = "*"
+
+# Maximum duration for reading entire request (in seconds)
+ReadTimeoutSec = 1
+
+# Maximum duration for writing response (in seconds)
+# Also controls maximum time for processing request
+WriteTimeoutSec = 30
+
+[Database]
+# Database connection
+#DbConnection = "postgresql://username:password@host/dbname"
+DbConnection = "user=postgres host=192.168.215.2 dbname=postgres password=postgres port=5432"
+
+# Hold no more than this number of connections in the database pool
+# DbPoolMaxConns = 4
+
+[Paging]
+# The default number of features in a response
+LimitDefault = 20
+# Maxium number of features in a response
+LimitMax = 10000
+
+[Website]
+# URL for the map view basemap
+BasemapUrl = "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"
+
+

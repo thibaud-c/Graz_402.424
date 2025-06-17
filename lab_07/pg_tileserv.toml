@@ -1,0 +1,32 @@
+# Database connection
+DbConnection = "user=postgres host=192.168.215.2 dbname=postgres password=postgres port=5432"
+
+# Close pooled connections after this interval
+DbPoolMaxConnLifeTime = "1h"
+
+# Hold no more than this number of connections in the database pool
+DbPoolMaxConns = 4
+
+# Accept connections on this subnet (default accepts on all)
+HttpHost = "0.0.0.0"
+
+# Accept connections on this port
+HttpPort = 7800
+
+# Resolution to quantize vector tiles to
+DefaultResolution = 4096
+
+# Rendering buffer to add to vector tiles
+DefaultBuffer = 256
+
+# Limit number of features requested (-1 = no limit)
+MaxFeaturesPerTile = 10000
+
+# Advertise this minimum zoom level
+DefaultMinZoom = 0
+
+# Advertise this maximum zoom level
+DefaultMaxZoom = 22
+
+# Allow any page to consume these tiles
+CORSOrigins = "*"
