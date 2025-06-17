@@ -51,11 +51,11 @@ docker run --rm  -p 7800:7800 -v ./pg_tileserv.toml:/opt/pg_tileserv/pg_tileserv
 ```
 
 > [!NOTE]
-> `run` allows you to run the container name `pramsey/pg_tileserv:latest`.
-> `--rm` removes the container after it stops, keeping your environment clean.
-> `-p 7800:7800` maps port 7800 on your host to port 7800 in the container, allowing you to access the tileserver.
-> `-v` mounts the local configuration file into the container, allowing pg_tileserv to use it.
-> `--config` specifies the path to the configuration file inside the container.
+> - `run` allows you to run the container name `pramsey/pg_tileserv:latest`.
+> - `--rm` removes the container after it stops, keeping your environment clean.
+> - `-p 7800:7800` maps port 7800 on your host to port 7800 in the container, allowing you to access the tileserver.
+> - `-v` mounts the local configuration file into the container, allowing pg_tileserv to use it.
+> - `--config` specifies the path to the configuration file inside the container.
 
 3. Explore the tileserver 
 
@@ -135,13 +135,21 @@ Let's navigate to the `/collections` endpoint to see the available collections (
 ! ⁉️ What is the URL of the featureserver? 
 ```
 
-➡️ `http://localhost:9000/collections/public.buildings/items.html`
+<details>
+    <summary>💡 Are you blocked? </summary>
+<br>
+
+> ➡️ `http://localhost:9000/collections/public.buildings/items.html`
+
+<br>
+</details>
+
 
 ```diff
 ! 🤔 How many features are displayed on the map? Change the limit to see a change
 ```
 
-💡 This is a feature server, which means that you can query your database from http queries! So cool 😎
+💡 This is a feature server, which means that you can query your database from http queries! So cool 😎 <br>
 Let's try this, preciously we created a fire_risk in our building table, let's try to query it.
 
 ```diff
@@ -239,8 +247,8 @@ Let's try this, preciously we created a fire_risk in our building table, let's t
 </details>
 
 > [!TIP]
-> You can combine multiple filters using `&`
-> Adding `&limit=100` to the query will return up to 100 features.
+> You can combine multiple filters using `&`. <br>
+> Adding `&limit=100` to the query will return up to 100 features. <br>
 > You can also use `filter=` to filter features based on SQL expressions.
 
 ```diff
