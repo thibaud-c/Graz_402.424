@@ -172,7 +172,7 @@ Do not try to make it:
 For this lab, it is enough that the script works for **this exercise**.
 
 > [!IMPORTANT]
-> **Reflection prompt**
+> **🧠 Questions**
 > - What is the difference between a script that is *useful* and one that is *over-engineered*?
 
 
@@ -205,7 +205,7 @@ echo "Starting population difference workflow..."
   - fail if part of a pipeline fails
 
 > [!IMPORTANT]
-> **Reflection prompts**
+> **🧠 Questions**
 > - Why is `set -euo pipefail` useful in a GIS workflow?
 > - How is this different from running commands manually in a terminal?
 
@@ -345,7 +345,7 @@ chmod +x run_population_diff.sh
 ```
 
 > [!IMPORTANT]
-> **Reflection prompts**
+> **🧠 Questions**
 > - Why is incremental scripting safer than writing the whole script at once?
 > - How is this similar to, or different from, building a model (Model Builder) in QGIS?
 > - Which errors become harder to isolate once commands are chained together?
@@ -393,7 +393,7 @@ Weaknesses:
 - requires discipline in writing readable code
 
 > [!IMPORTANT]
-> **Reflection prompts**
+> **🧠 Questions**
 > - Which workflow felt most transparent?
 > - Which workflow felt fastest?
 > - Which workflow would you trust most for a production pipeline?
@@ -435,7 +435,7 @@ Discuss:
 - what one team’s script does better than the other
 
 > [!IMPORTANT]
-> **Reflection prompts**
+> **🧠 Questions**
 > - Did your script and your peer’s script produce the same outputs?
 > - If not, at which section did they diverge?
 > - Which script would be easier for a third person to understand?
