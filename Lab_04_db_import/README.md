@@ -1,4 +1,4 @@
-# Exercise Guide: Municipality‑Level Population Change in Styria, From Manual CLI Workflow to a Reusable Shell Script
+# Exercise Guide: Everyday Amenities From Collection to Visualization
 
 (If you are reading this on VSCode, you can render the markdown using `Ctrl/Cmd+Shift+V`)
 
@@ -44,13 +44,30 @@ This time we will simply use our _`ubuntu server`_ to download the data. The dat
 
 ---
 
-**1. District boundaries**
+#### 1.1)  District boundaries**
 
 Find & Download the official Graz district layer.
-- [geodata graz](https://geodaten.graz.at/portal/home/item.html?id=3d80d9530fe545fa99ae5d10b0cc8904) 
+- Base url [geodata graz](https://geodaten.graz.at/arcgis/rest/services/OGD/VERWALTUNGSEINHEITEN_WMS/MapServer/2/query)
 
+> [!IMPORTANT]
+> **🧠 Questions**
+> - How to use the geodata graz API to download the data? What do we need to add to the url?
+> - What are the available options for the geodata graz API?
 
-**2. Overture places**
+> [!TIP]
+> We need to use:
+> - `where`: with the value `1=1`, we want all features so we enter a always true value
+> - format (use `f` in the url): with the value `geojson`
+> - `returnGeometry`: with the value `true`
+>
+> remember that the base URL should end with `?`and that your parameter should be connected with `&`
+
+Try to build the url and download the data.
+
+The final URL should look like this:
+`https://geodaten.graz.at/arcgis/rest/services/OGD/VERWALTUNGSEINHEITEN_WMS/MapServer/2/query?where=1=1&f=geojson&returnGeometry=true`
+
+#### 1.2)  Overture places**
 
 Download a Graz subset from the CLI.
 Look at the [📚 documentation](https://docs.overturemaps.org/getting-data/overturemaps-py/). 
@@ -61,7 +78,7 @@ Look at the [📚 documentation](https://docs.overturemaps.org/getting-data/over
 > - What are the available options for the overture CLI?
 > - In which format should we download the data? I recommand geojson. Why?
 
-**3. Data Check**
+#### 1.3) Data Check**
 - the file exists
 - the file is not empty
 - the geometry type is what you expect
@@ -156,6 +173,7 @@ This helps you see:
 > **🧠 Questions**
 - What are the columns available in each of your tables? 
 - Is there a geometry column? 
+- Are the geometries in the same projection?
 - What is the main column to find the amenities?
 - Is there any other columns that could be useful for the rest of the exercise?
 
