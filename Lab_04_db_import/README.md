@@ -84,7 +84,7 @@ Look at the [📚 documentation](https://docs.overturemaps.org/getting-data/over
 - the geometry type is what you expect
 - use `ogrinfo` and `cat` to inspect the data
 
-> [!INFO]
+> [!INFORMATION]
 > Remember to use `-so -al` with `ogrinfo` 
 > [📚 documentation](https://gdal.org/en/stable/programs/ogrinfo.html)
 
@@ -115,8 +115,9 @@ One example pattern is:
 ogr2ogr -f PostgreSQL PG:"<connection information to your PG database>" <path to your geojson file> -nln <name of the table in the database: overture_places/districts>
 ```
 
-> [!INFO]
+> [!INFORMATION]
 > Remember to use `-overwrite` to overwrite the table if it already exists.
+> You will also need to define a format if you import a geojson file, use `-f GeoJSON` for that.
 >
 > The connection to your _`remote`_ data base needs: 
 > - host: specifies the IP address of the PostgreSQL server (e.g., in our case it is the IP address of the Docker container)
@@ -153,7 +154,7 @@ Open the data using DBCode extension from VScode. Install the extension if you h
 - Use DBCode, ➕ to connect to your PostGIS database with the information above (you can use `localhost`for the host value). 
 - navigate to dbname (postgres) > schemas > public > tables. You should see your tables `districts` and `overture_places`.
 
-> [!INFO]
+> [!INFORMATION]
 > A schema in a database is a way to organize tables. The default schema is `public`. 
 >
 > In DBcode, if you don't see an update, you can click on 🔄 to refresh. 
